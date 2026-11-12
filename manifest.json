@@ -1,8 +1,8 @@
 {
   "name": "Lista Must Do",
   "short_name": "Must Do",
-  "start_url": "/lista-must-do/",
-  "scope": "/lista-must-do/",
+  "start_url": "/tarefas-Rui/",
+  "scope": "/tarefas-Rui/",
   "display": "standalone",
   "background_color": "#f7f7f7",
   "theme_color": "#111111",
