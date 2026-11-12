@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6efe6">
+<title>Casa & Vida</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f6efe6; --bg2:#ece1d2;
+  --surface:rgba(255,252,247,.72); --surface-solid:#fffdf9; --surface-hover:rgba(255,253,249,.95);
+  --border:rgba(110,85,60,.10); --border-mid:rgba(110,85,60,.18);
+  --text:#3d342c; --text2:#6a5d50; --muted:#a09282;
+
+  --ink:#6e5a49; --ink-2:#5b4939; --ink-soft:#ece2d6;
+
+  --slate:#5f7782;  --slate-soft:#e0e8ea;
+  --sage:#6b7d5c;   --sage-soft:#e3e9db;
+  --sand:#a07640;   --sand-soft:#f2e3cc;
+  --clay:#a4685c;   --clay-soft:#f1dcd4;
+
+  --shadow:0 4px 18px rgba(130,100,70,.08),0 1px 2px rgba(130,100,70,.05);
+  --r:16px; --r-lg:24px;
+  --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
+}
+html,body{height:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:var(--bg); color:var(--text); overflow:hidden;
+  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
+  font-feature-settings:"cv11","ss01";
+}
+button,input,select{font-family:inherit}
+
+.app{position:relative;width:100%;height:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);background:
+  radial-gradient(circle at 0% 0%,rgba(255,255,255,.85) 0%,transparent 45%),
+  radial-gradient(circle at 105% 30%,rgba(224,190,170,.35) 0%,transparent 50%),
+  radial-gradient(circle at 0% 70%,rgba(200,215,185,.30) 0%,transparent 50%),
+  radial-gradient(circle at 80% 105%,rgba(214,196,160,.35) 0%,transparent 50%),
+  var(--bg)}
+@media(min-width:720px){
+  body{display:grid;place-items:center;background:#e8ddcf}
+  .app{height:880px;max-height:calc(100vh - 40px);border-radius:34px;overflow:hidden;box-shadow:0 0 0 1px #d9ccb9,0 40px 80px rgba(90,65,40,.18)}
+}
+
+.header{padding:1.5rem 1.5rem .6rem;display:flex;align-items:center;gap:.9rem;flex-shrink:0;animation:fadeDown .5s var(--ease) both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}}
+.greeting{flex:1;min-width:0;line-height:1.3}
+.greeting small{color:var(--muted);font-size:.78rem;display:block;font-weight:500}
+.greeting strong{font-size:1.45rem;letter-spacing:-.025em;display:block;font-weight:650}
+.icon-btn{width:42px;height:42px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;transition:transform .2s var(--spring),background .25s;color:var(--text2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.icon-btn:hover{background:var(--surface-hover)}
+.icon-btn:active{transform:scale(.92)}
+.icon-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+.views{flex:1;position:relative;overflow:hidden}
+.view{position:absolute;inset:0;padding:0 1.5rem 10rem;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;opacity:0;pointer-events:none;transform:translateY(12px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.view::-webkit-scrollbar{display:none}
+.view.active{opacity:1;pointer-events:auto;transform:none}
+.view.active > *{animation:stagger .45s var(--ease) backwards}
+.view.active > *:nth-child(1){animation-delay:.02s}
+.view.active > *:nth-child(2){animation-delay:.05s}
+.view.active > *:nth-child(3){animation-delay:.08s}
+.view.active > *:nth-child(4){animation-delay:.11s}
+.view.active > *:nth-child(5){animation-delay:.14s}
+.view.active > *:nth-child(6){animation-delay:.17s}
+.view.active > *:nth-child(7){animation-delay:.20s}
+.view.active > *:nth-child(8){animation-delay:.23s}
+@keyframes stagger{from{opacity:0;transform:translateY(10px)}}
+
+.section{font-weight:650;font-size:1.05rem;letter-spacing:-.015em;margin:1.7rem 0 .8rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.section .acts{display:flex;gap:.4rem}
+.add-link{font-size:.7rem;font-weight:600;color:var(--ink);cursor:pointer;letter-spacing:.02em;background:rgba(110,85,60,.09);border:none;border-radius:999px;padding:.38rem .8rem;transition:transform .2s var(--spring),background .2s}
+.add-link:hover{background:rgba(110,85,60,.15)}
+.add-link:active{transform:scale(.94)}
+.add-link.quiet{background:transparent;color:var(--muted)}
+
+/* HERO */
+.hero{padding:1.5rem;border-radius:var(--r-lg);background:linear-gradient(145deg,#ead6bf 0%,#f0d9cb 55%,#e6dcc6 100%);color:#43372c;position:relative;overflow:hidden;box-shadow:0 14px 34px rgba(150,115,80,.20);border:1px solid rgba(255,255,255,.6)}
+.hero::after{content:'';position:absolute;right:-50px;top:-60px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),transparent 70%)}
+.hero::before{content:'';position:absolute;left:-40px;bottom:-70px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(200,215,185,.45),transparent 70%)}
+.hero .label{font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(67,55,44,.55);margin-bottom:.5rem;position:relative}
+.hero .big{font-size:1.9rem;font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.3rem;position:relative}
+.hero .big span{color:rgba(67,55,44,.5);font-weight:500}
+.hero .row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;position:relative;border-top:1px solid rgba(67,55,44,.13);padding-top:1rem}
+.hero .mini small{font-size:.68rem;color:rgba(67,55,44,.55);text-transform:uppercase;letter-spacing:.07em;font-weight:600;display:block;margin-bottom:.25rem}
+.hero .mini strong{font-size:.95rem;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+
+.list{display:flex;flex-direction:column;gap:.45rem}
+.item{display:flex;align-items:center;gap:.85rem;padding:.8rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);transition:background .2s;animation:itemIn .35s var(--ease) backwards;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.item:hover{background:var(--surface-hover)}
+@keyframes itemIn{from{opacity:0;transform:translateY(8px)}}
+.item .icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+.item .icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.item .body{flex:1;min-width:0}
+.item .body strong{font-size:.9rem;display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .body small{font-size:.75rem;color:var(--muted);display:block;margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item.done .body strong{text-decoration:line-through;color:var(--muted)}
+
+.del{width:28px;height:28px;border-radius:50%;border:none;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:background .2s,color .2s;padding:0;opacity:.7}
+.del:hover{background:rgba(110,85,60,.10);color:var(--text);opacity:1}
+.del svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+
+.tone-slate{background:var(--slate-soft);color:var(--slate)}
+.tone-sage{background:var(--sage-soft);color:var(--sage)}
+.tone-sand{background:var(--sand-soft);color:var(--sand)}
+.tone-clay{background:var(--clay-soft);color:var(--clay)}
+.tone-ink{background:var(--ink-soft);color:var(--ink)}
+.tone-clay{background:var(--clay-soft);color:var(--clay)}
+
+.empty{text-align:center;padding:1.8rem 1.2rem;background:rgba(255,252,247,.45);border:1.5px dashed var(--border-mid);border-radius:var(--r)}
+.empty .empty-icon{width:44px;height:44px;margin:0 auto .8rem;border-radius:50%;background:rgba(110,85,60,.07);display:grid;place-items:center;color:var(--muted)}
+.empty .empty-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.empty strong{font-size:.88rem;font-weight:600;display:block;margin-bottom:.2rem;color:var(--text2)}
+.empty p{font-size:.78rem;color:var(--muted);line-height:1.5;max-width:240px;margin-inline:auto}
+
+.evento{display:flex;gap:.9rem;align-items:center;padding:.8rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);animation:itemIn .35s var(--ease) backwards;transition:background .2s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.evento:hover{background:var(--surface-hover)}
+.evento.past{opacity:.5}
+.ev-date{width:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.45rem .2rem;border-radius:12px}
+.ev-date .d{font-size:1.15rem;font-weight:650;line-height:1;font-variant-numeric:tabular-nums}
+.ev-date .m{font-size:.58rem;text-transform:uppercase;font-weight:700;letter-spacing:.07em;margin-top:.2rem}
+.ev-body{flex:1;min-width:0}
+.ev-body strong{font-size:.88rem;display:block;font-weight:600;margin-bottom:.2rem}
+.ev-body small{font-size:.75rem;color:var(--muted);display:block}
+.tag{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.13rem .5rem;border-radius:999px;margin-right:.4rem}
+.t-escola .ev-date,.t-escola .tag{background:var(--slate-soft);color:var(--slate)}
+.t-consulta .ev-date,.t-consulta .tag{background:var(--sage-soft);color:var(--sage)}
+.t-manutencao .ev-date,.t-manutencao .tag{background:var(--sand-soft);color:var(--sand)}
+
+.filha-card{background:linear-gradient(135deg,rgba(255,252,247,.9),rgba(241,220,212,.75));border:1px solid rgba(255,255,255,.8);border-radius:var(--r-lg);padding:1.3rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--shadow)}
+.filha-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#d9b9a2,#c79d86);display:grid;place-items:center;flex-shrink:0;color:#fff;font-size:1.3rem;font-weight:600}
+.filha-info h3{font-size:1.25rem;font-weight:650;letter-spacing:-.02em;margin-bottom:.2rem}
+.filha-info p{font-size:.82rem;color:var(--text2)}
+
+.check{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border-mid);background:rgba(255,252,247,.8);cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:all .2s var(--spring);color:transparent;font-size:.7rem;font-weight:700;padding:0}
+.check:hover{border-color:var(--ink)}
+.check.done{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.progress{height:6px;background:rgba(110,85,60,.09);border-radius:3px;overflow:hidden;margin-top:.6rem}
+.progress .bar{height:100%;border-radius:3px;background:var(--ink);transition:width .8s var(--ease)}
+.orc-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.2rem}
+.orc-row strong{font-size:.88rem;font-weight:600}
+.orc-row span{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.st{font-weight:600;color:var(--sage)}
+.st.due{color:var(--clay)}
+.water{width:34px;height:34px;border-radius:50%;border:none;background:var(--slate-soft);color:var(--slate);cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:transform .2s var(--spring),background .2s;padding:0}
+.water.due{background:var(--ink);color:#fff}
+.water:active{transform:scale(.9)}
+.water svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin:1.2rem 0 0}
+.chip{padding:.45rem .9rem;background:rgba(255,252,247,.6);border:1.5px solid var(--border-mid);border-radius:999px;font-size:.78rem;color:var(--text2);cursor:pointer;transition:all .2s;font-weight:500}
+.chip:hover{border-color:var(--ink)}
+.chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* FAB */
+.fab{position:absolute;bottom:calc(96px + env(safe-area-inset-bottom));right:1.5rem;width:54px;height:54px;border-radius:50%;border:none;background:var(--ink);color:#fff;cursor:pointer;display:grid;place-items:center;z-index:30;box-shadow:0 10px 26px rgba(110,85,60,.32);transition:transform .25s var(--spring),background .2s}
+.fab:hover{background:var(--ink-2);transform:translateY(-2px)}
+.fab:active{transform:scale(.92)}
+.fab svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* NAV FLUTUANTE TRANSPARENTE */
+.nav{position:absolute;left:1.1rem;right:1.1rem;bottom:calc(.9rem + env(safe-area-inset-bottom));display:flex;gap:.2rem;padding:.35rem;border-radius:999px;z-index:20;
+  background:rgba(255,250,243,.45);
+  backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 10px 32px rgba(120,90,60,.14),inset 0 1px 0 rgba(255,255,255,.75)}
+.nav-btn{flex:1;background:none;border:none;color:var(--text2);padding:.7rem .3rem;display:flex;align-items:center;justify-content:center;gap:.4rem;cursor:pointer;font-size:.78rem;font-weight:600;border-radius:999px;transition:background .3s var(--ease),color .25s,box-shadow .3s}
+.nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-btn span{display:none}
+.nav-btn.active{background:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(110,85,60,.28)}
+.nav-btn.active span{display:inline}
+.nav-btn:not(.active):hover{background:rgba(255,255,255,.55)}
+.nav-btn:active{transform:scale(.97)}
+
+/* SHEET */
+.sheet-backdrop{position:absolute;inset:0;background:rgba(70,50,35,.30);opacity:0;pointer-events:none;transition:opacity .3s var(--ease);z-index:40;backdrop-filter:blur(2px)}
+.sheet-backdrop.show{opacity:1;pointer-events:auto}
+.sheet{position:absolute;bottom:0;left:0;right:0;background:rgba(250,245,238,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:28px 28px 0 0;padding:1rem 1.5rem calc(1.4rem + env(safe-area-inset-bottom));z-index:41;transform:translateY(100%);transition:transform .35s var(--spring);box-shadow:0 -16px 40px rgba(90,65,40,.16);max-height:88%;overflow-y:auto}
+.sheet.show{transform:translateY(0)}
+.sheet-handle{width:38px;height:4px;background:var(--border-mid);border-radius:2px;margin:0 auto .9rem}
+.sheet h2{font-weight:650;font-size:1.25rem;letter-spacing:-.02em;margin-bottom:1.2rem}
+.form-group{margin-bottom:.9rem}
+.form-group label{display:block;font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+.form-group input,.form-group select{width:100%;padding:.75rem .9rem;font-size:.95rem;background:#fffdf9;border:1.5px solid var(--border-mid);border-radius:12px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(110,85,60,.12)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.btn-row{display:flex;gap:.5rem;margin-top:1.1rem}
+.btn{flex:1;padding:.85rem;border-radius:999px;border:none;font-size:.9rem;font-weight:600;cursor:pointer;transition:transform .2s var(--spring),background .2s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--ink-2)}
+.btn.ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border-mid)}
+.btn.ghost:hover{border-color:var(--text2)}
+.btn.soft{background:rgba(110,85,60,.10);color:var(--ink-2)}
+.btn.danger{background:var(--clay-soft);color:var(--clay)}
+
+.toast{position:absolute;bottom:calc(168px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:.65rem 1.1rem;border-radius:999px;font-size:.82rem;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s,transform .3s var(--spring);z-index:60;white-space:nowrap;box-shadow:0 6px 20px rgba(90,65,40,.30)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.sheet-action{display:flex;align-items:center;gap:.9rem;padding:.8rem 1rem;margin-bottom:.45rem;background:#fffdf9;border:1px solid var(--border);border-radius:16px;cursor:pointer;font-size:.92rem;color:var(--text);font-weight:500;text-align:left;width:100%;transition:background .2s,transform .2s}
+.sheet-action:hover{background:var(--bg)}
+.sheet-action:active{transform:scale(.98)}
+.sheet-action .sa-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+.sheet-action .sa-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="greeting">
+      <small id="dataHoje">—</small>
+      <strong id="saudacao">Bom dia</strong>
+    </div>
+    <button class="icon-btn" id="btnConfig" title="Ajustes" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </header>
+
+  <div class="views">
+
+    <section class="view active" data-view="inicio">
+      <div class="hero">
+        <div class="label">Hoje</div>
+        <div class="big" id="heroBig">Tudo em dia</div>
+        <div class="row">
+          <div class="mini"><small>Por comprar</small><strong id="heroCompras">—</strong></div>
+          <div class="mini"><small>Plantas</small><strong id="heroPlantas">—</strong></div>
+        </div>
+      </div>
+      <div class="section">Para hoje</div>
+      <div id="hojeList"></div>
+      <div class="section">Próximos eventos</div>
+      <div id="proximosEventos"></div>
+    </section>
+
+    <section class="view" data-view="agenda">
+      <div class="section" style="margin-top:.6rem">Agenda <button class="add-link" onclick="menuEvento()">Adicionar</button></div>
+      <div class="chips" id="chipsAg" style="margin-top:0"></div>
+      <div class="section">Próximos</div><div id="agProximos"></div>
+      <div id="agPassadosWrap"></div>
+    </section>
+
+    <section class="view" data-view="filha">
+      <div class="filha-card">
+        <div class="filha-avatar" id="filhaAvatar">·</div>
+        <div class="filha-info">
+          <h3 id="filhaNome">A tua filha</h3>
+          <p id="filhaIdade">Adiciona o nome nos ajustes</p>
+        </div>
+      </div>
+      <div class="section">Escola <button class="add-link" onclick="abrirSheet(formEvento('filha.escola','Evento de escola'))">Adicionar</button></div><div id="escolaList"></div>
+      <div class="section">Atividades <button class="add-link" onclick="abrirSheet(formAtividade())">Adicionar</button></div><div id="atividadesList"></div>
+      <div class="section">Consultas <button class="add-link" onclick="abrirSheet(formEvento('filha.consultas','Nova consulta'))">Adicionar</button></div><div id="consultasList"></div>
+      <div class="section">Mesada</div>
+      <div class="card">
+        <div class="orc-row"><strong>Mesada semanal</strong><span id="mesadaSem">0,00 €</span></div>
+        <p style="margin-top:.5rem;font-size:.82rem;color:var(--muted)">Total guardado: <strong id="mesadaTotal" style="color:var(--text);font-size:1rem;font-weight:650">0,00 €</strong></p>
+        <div class="btn-row">
+          <button class="btn soft" onclick="darMesada()">+ Dar mesada</button>
+          <button class="btn ghost" onclick="abrirSheet(formLevantar())">Gastar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="casa">
+      <div class="section">Lista de compras <span class="acts" id="actsCompras"></span></div><div id="comprasList"></div>
+      <div class="section">Tarefas de casa <span class="acts" id="actsTarefas"></span></div><div id="tarefasList"></div>
+      <div class="section">Plantas <button class="add-link" onclick="abrirSheet(formPlanta())">Adicionar</button></div><div id="plantasList"></div>
+    </section>
+
+  </div>
+
+  <button class="fab" id="fabAdd" aria-label="Adicionar"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+
+  <nav class="nav">
+    <button class="nav-btn active" data-tab="inicio"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span>Início</span></button>
+    <button class="nav-btn" data-tab="agenda"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Agenda</span></button>
+    <button class="nav-btn" data-tab="filha"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Filha</span></button>
+    <button class="nav-btn" data-tab="casa"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span>Casa</span></button>
+  </nav>
+
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <div class="sheet" id="sheet"><div class="sheet-handle"></div><div id="sheetContent"></div></div>
+  <div class="toast" id="toast"></div>
+  <input type="file" id="fileImport" accept="application/json" hidden>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const STORAGE = 'casa-vida-v3';
+const DIAS_SEMANA = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+const diaHoje = () => ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'][new Date().getDay()];
+const hojeISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().split('T')[0]; };
+
+const estadoVazio = () => ({
+  nome: '', filhaNome: '', filhaIdade: '',
+  filha: { escola: [], atividades: [], consultas: [], mesada: { semana: 0, total: 0 } },
+  casa: { compras: [], tarefas: [], manutencao: [], plantas: [] }
+});
+
+function normalizar(s){
+  const v = estadoVazio();
+  const e = Object.assign({}, s);                 // mantém campos antigos guardados, sem os mostrar
+  e.nome = s.nome || ''; e.filhaNome = s.filhaNome || ''; e.filhaIdade = s.filhaIdade || '';
+  e.filha = Object.assign(v.filha, s.filha || {});
+  e.filha.mesada = Object.assign({semana:0,total:0}, (s.filha||{}).mesada || {});
+  e.casa = Object.assign(v.casa, s.casa || {});
+  if (!Array.isArray(e.casa.plantas)) e.casa.plantas = [];
+  const comIds = arr => { let max = Math.max(0,...arr.map(y=>y.id||0)); arr.forEach(x => { if (typeof x.id !== 'number') x.id = ++max; }); };
+  [e.filha.escola, e.filha.atividades, e.filha.consultas, e.casa.compras, e.casa.tarefas, e.casa.manutencao, e.casa.plantas].forEach(comIds);
+  e.casa.manutencao.forEach(m => { if (!m.titulo) m.titulo = m.tarefa || ''; });
+  return e;
+}
+function carregar(){
+  try {
+    const raw = localStorage.getItem(STORAGE);
+    if (!raw) return estadoVazio();
+    const s = JSON.parse(raw);
+    return (s && typeof s === 'object') ? normalizar(s) : estadoVazio();
+  } catch (e) { return estadoVazio(); }
+}
+let estado = carregar();
+function guardar(){ try { localStorage.setItem(STORAGE, JSON.stringify(estado)); } catch (e) {} }
+
+const proximoId = arr => arr.length ? Math.max(...arr.map(x=>x.id||0))+1 : 1;
+const num = v => parseFloat(String(v).replace(',','.'));
+const fmt = n => (n||0).toLocaleString('pt-PT',{style:'currency',currency:'EUR'});
+const getArr = p => p.split('.').reduce((o,k)=>o[k], estado);
+const sortEv = arr => arr.slice().sort((a,b)=>(a.data+(a.hora||'')).localeCompare(b.data+(b.hora||'')));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ÍCONES */
+const I = {
+  x:'<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  cart:'<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>',
+  home:'<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  task:'<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+  cal:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  cap:'<svg viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>',
+  heart:'<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  smile:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>',
+  tool:'<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 4 13c0-6 6-9 16-9 0 10-3 16-9 16z"/><path d="M4 20c3-6 6-9 11-11"/></svg>',
+  drop:'<svg viewBox="0 0 24 24"><path d="M12 2.7s7 7.2 7 12a7 7 0 0 1-14 0c0-4.8 7-12 7-12z"/></svg>'
+};
+const delBtn = (path,id) => `<button class="del" aria-label="Remover" onclick="apagar('${path}',${id})">${I.x}</button>`;
+const emptyState = (ico, titulo, sub) => `<div class="empty"><div class="empty-icon">${ico}</div><strong>${titulo}</strong><p>${sub}</p></div>`;
+
+function atualizarHeader(){
+  const h = new Date().getHours();
+  const sauda = h < 12 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite';
+  $('#saudacao').textContent = estado.nome ? `${sauda}, ${estado.nome}` : sauda;
+  $('#dataHoje').textContent = cap(new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'}));
+}
+
+/* NAV */
+function irPara(view){
+  $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === view));
+  const v = $(`.view[data-view="${view}"]`); if (v) v.scrollTop = 0;
+}
+$$('.nav-btn').forEach(b => b.addEventListener('click', () => irPara(b.dataset.tab)));
+
+/* COMPONENTES */
+function eventoHTML(ev, i, path, tipo, tag){
+  const d = new Date(ev.data+'T00:00');
+  const dia = String(d.getDate()).padStart(2,'0');
+  const mes = d.toLocaleDateString('pt-PT',{month:'short'}).replace('.','').toUpperCase();
+  const sub = [ev.hora, ev.local].filter(Boolean).map(escapeHtml).join(' · ');
+  return `<div class="evento t-${tipo} ${ev.data < hojeISO() ? 'past':''}" style="animation-delay:${i*0.05}s">
+    <div class="ev-date"><span class="d">${dia}</span><span class="m">${mes}</span></div>
+    <div class="ev-body"><strong>${escapeHtml(ev.titulo)}</strong><small>${tag?`<span class="tag">${tag}</span>`:''}${sub}</small></div>
+    ${path ? delBtn(path, ev.id) : ''}
+  </div>`;
+}
+function checkItem(path, c, titulo, sub, i, icone){
+  return `<div class="item ${c.feito?'done':''}" style="animation-delay:${i*0.04}s">
+    <button class="check ${c.feito?'done':''}" data-path="${path}" data-id="${c.id}" aria-label="Marcar">✓</button>
+    <div class="body"><strong>${escapeHtml(titulo)}</strong>${sub?`<small>${escapeHtml(sub)}</small>`:''}</div>
+    ${delBtn(path, c.id)}
+  </div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.check[data-path]'); if (!b) return;
+  const x = getArr(b.dataset.path).find(y => y.id === +b.dataset.id);
+  if (x) { x.feito = !x.feito; guardar(); renderTudo(); toast(x.feito ? 'Concluído' : 'Reaberto'); }
+});
+
+function todosEventos(){
+  return [
+    ...estado.filha.escola.map(e => ({...e, tipo:'escola', tag:'Escola', path:'filha.escola'})),
+    ...estado.filha.consultas.map(e => ({...e, tipo:'consulta', tag:'Consulta', path:'filha.consultas'})),
+    ...estado.casa.manutencao.map(e => ({...e, tipo:'manutencao', tag:'Casa', path:'casa.manutencao'}))
+  ];
+}
+function eventosFuturos(){
+  const hoje = hojeISO();
+  return todosEventos().filter(e => e.data >= hoje).sort((a,b) => (a.data+(a.hora||'')).localeCompare(b.data+(b.hora||'')));
+}
+
+/* PLANTAS */
+const diasEntre = (isoA, isoB) => Math.round((new Date(isoB+'T00:00') - new Date(isoA+'T00:00')) / 864e5);
+function estadoPlanta(p){
+  const freq = Math.max(1, +p.freq || 7);
+  const d = freq - diasEntre(p.ultima || hojeISO(), hojeISO());   // dias até à próxima rega
+  let txt;
+  if (d < 0) txt = `Atrasada ${-d} ${d===-1?'dia':'dias'}`;
+  else if (d === 0) txt = 'Regar hoje';
+  else if (d === 1) txt = 'Amanhã';
+  else txt = `Em ${d} dias`;
+  return { d, txt, due: d <= 0, freq };
+}
+const plantasOrdenadas = () => estado.casa.plantas.slice().sort((a,b) => estadoPlanta(a).d - estadoPlanta(b).d);
+function plantaHTML(p, i, comDel){
+  const st = estadoPlanta(p);
+  const sub = [p.local, `cada ${st.freq} ${st.freq===1?'dia':'dias'}`].filter(Boolean).map(escapeHtml).join(' · ');
+  return `<div class="item" style="animation-delay:${i*0.04}s">
+    <div class="icon tone-sage">${I.leaf}</div>
+    <div class="body"><strong>${escapeHtml(p.nome)}</strong><small><span class="st ${st.due?'due':''}">${st.txt}</span>${comDel?` · ${sub}`:(p.local?` · ${escapeHtml(p.local)}`:'')}</small></div>
+    <button class="water ${st.due?'due':''}" aria-label="Reguei" onclick="regar(${p.id})">${I.drop}</button>
+    ${comDel ? delBtn('casa.plantas', p.id) : ''}
+  </div>`;
+}
+
+/* INÍCIO */
+function renderInicio(){
+  const tarefasHoje = estado.casa.tarefas.filter(t => t.dia === 'Hoje');
+  const pend = tarefasHoje.filter(t => !t.feito).length;
+  $('#heroBig').innerHTML = pend
+    ? `${pend} ${pend===1?'tarefa':'tarefas'} <span>para hoje</span>`
+    : `Tudo em dia <span>hoje</span>`;
+
+  const porComprar = estado.casa.compras.filter(c => !c.feito).length;
+  $('#heroCompras').textContent = porComprar ? `${porComprar} ${porComprar===1?'item':'itens'}` : 'Nada';
+
+  const evs = eventosFuturos();
+  const aRegar = plantasOrdenadas().filter(p => estadoPlanta(p).due);
+  $('#heroPlantas').textContent = !estado.casa.plantas.length ? '—' : aRegar.length ? `${aRegar.length} ${aRegar.length===1?'a regar':'a regar'}` : 'Tudo regado';
+
+  // Para hoje
+  const hoje = diaHoje();
+  const linhas = [];
+  tarefasHoje.forEach(t => linhas.push(checkItem('casa.tarefas', t, t.tarefa, 'Tarefa de casa', linhas.length)));
+  estado.filha.atividades.filter(a => a.dia === hoje).forEach(a => linhas.push(`
+    <div class="item" style="animation-delay:${linhas.length*0.04}s">
+      <div class="icon tone-slate">${I.smile}</div>
+      <div class="body"><strong>${escapeHtml(a.nome)}</strong><small>${[estado.filhaNome||'Filha', a.hora, a.local].filter(Boolean).map(escapeHtml).join(' · ')}</small></div>
+    </div>`));
+  aRegar.forEach(p => linhas.push(plantaHTML(p, linhas.length, false)));
+  $('#hojeList').innerHTML = linhas.length
+    ? `<div class="list">${linhas.join('')}</div>`
+    : emptyState(I.task,'Dia livre','Tarefas para "Hoje", atividades e plantas por regar aparecem aqui.');
+
+  $('#proximosEventos').innerHTML = evs.length
+    ? `<div class="list">${evs.slice(0,4).map((ev,i)=>eventoHTML(ev,i,null,ev.tipo,ev.tag)).join('')}</div>`
+    : emptyState(I.cal,'Sem eventos à vista','Vai à Agenda ou toca no + para adicionar.');
+}
+
+/* FILHA */
+function renderFilha(){
+  const nome = estado.filhaNome;
+  $('#filhaNome').textContent = nome || 'A tua filha';
+  $('#filhaIdade').textContent = estado.filhaIdade || 'Adiciona o nome nos ajustes';
+  $('#filhaAvatar').textContent = nome ? nome.charAt(0).toUpperCase() : '·';
+
+  $('#escolaList').innerHTML = estado.filha.escola.length
+    ? `<div class="list">${sortEv(estado.filha.escola).map((e,i)=>eventoHTML(e,i,'filha.escola','escola')).join('')}</div>`
+    : emptyState(I.cap,'Sem eventos de escola','Reuniões, testes ou festas.');
+
+  $('#atividadesList').innerHTML = estado.filha.atividades.length
+    ? `<div class="list">${estado.filha.atividades.map((a,i)=>`
+      <div class="item" style="animation-delay:${i*0.05}s">
+        <div class="icon tone-slate">${I.smile}</div>
+        <div class="body"><strong>${escapeHtml(a.nome)}</strong><small>${[a.dia,a.hora,a.local].filter(Boolean).map(escapeHtml).join(' · ')}</small></div>
+        ${delBtn('filha.atividades', a.id)}
+      </div>`).join('')}</div>`
+    : emptyState(I.smile,'Sem atividades','Natação, ballet, música...');
+
+  $('#consultasList').innerHTML = estado.filha.consultas.length
+    ? `<div class="list">${sortEv(estado.filha.consultas).map((c,i)=>eventoHTML(c,i,'filha.consultas','consulta')).join('')}</div>`
+    : emptyState(I.heart,'Sem consultas','Pediatra, dentista, oftalmologista.');
+
+  const m = estado.filha.mesada;
+  $('#mesadaSem').textContent = fmt(m.semana);
+  $('#mesadaTotal').textContent = fmt(m.total);
+}
+
+/* CASA */
+function renderCasa(){
+  const c = estado.casa;
+  $('#actsCompras').innerHTML = (c.compras.some(x=>x.feito) ? `<button class="add-link quiet" onclick="limparFeitos('casa.compras')">Limpar feitos</button>` : '')
+    + `<button class="add-link" onclick="abrirSheet(formCompra())">Adicionar</button>`;
+  $('#actsTarefas').innerHTML = (c.tarefas.some(x=>x.feito) ? `<button class="add-link quiet" onclick="limparFeitos('casa.tarefas')">Limpar feitos</button>` : '')
+    + `<button class="add-link" onclick="abrirSheet(formTarefa())">Adicionar</button>`;
+
+  $('#comprasList').innerHTML = c.compras.length
+    ? `<div class="list">${c.compras.map((x,i)=>checkItem('casa.compras',x,x.item,'',i)).join('')}</div>`
+    : emptyState(I.cart,'Lista vazia','O que falta comprar?');
+
+  $('#tarefasList').innerHTML = c.tarefas.length
+    ? `<div class="list">${c.tarefas.map((x,i)=>checkItem('casa.tarefas',x,x.tarefa,x.dia,i)).join('')}</div>`
+    : emptyState(I.task,'Sem tarefas','Lavar roupa, aspirar, regar plantas...');
+
+  $('#plantasList').innerHTML = c.plantas.length
+    ? `<div class="list">${plantasOrdenadas().map((p,i)=>plantaHTML(p,i,true)).join('')}</div>`
+    : emptyState(I.leaf,'Sem plantas','Adiciona as tuas plantas e sabe quando regar.');
+}
+
+/* AGENDA */
+let filtroAg = 'todos';
+const FILTROS_AG = [['todos','Todos'],['manutencao','Casa'],['escola','Escola'],['consulta','Consultas']];
+function renderAgenda(){
+  $('#chipsAg').innerHTML = FILTROS_AG.map(([k,l]) => `<button class="chip ${filtroAg===k?'active':''}" data-f="${k}">${l}</button>`).join('');
+  $$('#chipsAg .chip').forEach(c => c.addEventListener('click', () => { filtroAg = c.dataset.f; renderAgenda(); }));
+  const hoje = hojeISO();
+  const todos = todosEventos().filter(e => filtroAg==='todos' || e.tipo===filtroAg);
+  const fut = todos.filter(e => e.data >= hoje).sort((a,b)=>(a.data+(a.hora||'')).localeCompare(b.data+(b.hora||'')));
+  const pas = todos.filter(e => e.data < hoje).sort((a,b)=>(b.data+(b.hora||'')).localeCompare(a.data+(a.hora||''))).slice(0,8);
+  $('#agProximos').innerHTML = fut.length
+    ? `<div class="list">${fut.map((e,i)=>eventoHTML(e,i,e.path,e.tipo,e.tag)).join('')}</div>`
+    : emptyState(I.cal,'Nada marcado','Revisões da casa, reuniões da escola, consultas...');
+  $('#agPassadosWrap').innerHTML = pas.length
+    ? `<div class="section">Passados</div><div class="list">${pas.map((e,i)=>eventoHTML(e,i,e.path,e.tipo,e.tag)).join('')}</div>` : '';
+}
+window.menuEvento = function(){
+  abrirSheet(`<h2>Novo evento</h2>
+    ${acao(I.home,'tone-sand','Casa · revisão, reparação, visita',"abrirSheet(formEvento('casa.manutencao','Evento de casa'))")}
+    ${acao(I.cap,'tone-slate','Escola',"abrirSheet(formEvento('filha.escola','Evento de escola'))")}
+    ${acao(I.heart,'tone-sage','Consulta',"abrirSheet(formEvento('filha.consultas','Nova consulta'))")}`);
+};
+
+/* APAGAR / LIMPAR */
+window.apagar = function(path, id){
+  const arr = getArr(path), i = arr.findIndex(x => x.id === id);
+  if (i < 0) return;
+  arr.splice(i,1); guardar(); renderTudo(); toast('Removido');
+};
+window.limparFeitos = function(path){
+  const arr = getArr(path);
+  for (let i = arr.length-1; i >= 0; i--) if (arr[i].feito) arr.splice(i,1);
+  guardar(); renderTudo(); toast('Concluídos removidos');
+};
+
+/* SHEET */
+const sheet = $('#sheet'), backdrop = $('#sheetBackdrop'), sheetContent = $('#sheetContent');
+function abrirSheet(html){
+  sheetContent.innerHTML = html; sheet.classList.add('show'); backdrop.classList.add('show');
+  setTimeout(()=>{ const i = sheetContent.querySelector('input:not([type=date]):not([type=time]):not([type=file])'); if (i && matchMedia('(hover:hover)').matches) i.focus(); }, 350);
+}
+function fecharSheet(){ sheet.classList.remove('show'); backdrop.classList.remove('show'); }
+backdrop.addEventListener('click', fecharSheet);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharSheet(); });
+window.abrirSheet = abrirSheet; window.fecharSheet = fecharSheet;
+
+/* FAB */
+const acao = (ico,cls,txt,fn) => `<button class="sheet-action" onclick="${fn}"><span class="sa-icon ${cls}">${ico}</span>${txt}</button>`;
+$('#fabAdd').addEventListener('click', () => {
+  const view = $('.view.active').dataset.view;
+  if (view === 'agenda') return menuEvento();
+  const A = {
+    compra:  acao(I.cart,'tone-sage','Item de compras',"abrirSheet(formCompra())"),
+    tarefa:  acao(I.task,'tone-ink','Tarefa de casa',"abrirSheet(formTarefa())"),
+    planta:  acao(I.leaf,'tone-sage','Planta',"abrirSheet(formPlanta())"),
+    escola:  acao(I.cap,'tone-slate','Evento de escola',"abrirSheet(formEvento('filha.escola','Evento de escola'))"),
+    ativ:    acao(I.smile,'tone-slate','Atividade semanal',"abrirSheet(formAtividade())"),
+    consulta:acao(I.heart,'tone-clay','Consulta',"abrirSheet(formEvento('filha.consultas','Nova consulta'))")
+  };
+  const grupos = { inicio:[A.tarefa,A.compra,A.planta,A.escola,A.consulta], casa:[A.compra,A.tarefa,A.planta], filha:[A.escola,A.ativ,A.consulta] };
+  abrirSheet(`<h2>O que queres adicionar?</h2>${grupos[view].join('')}`);
+});
+
+/* FORMS */
+function formCompra(){
+  return `<h2>Novo item</h2>
+    <div class="form-group"><label>O que falta comprar?</label><input id="inputItem" placeholder="Ex.: Leite" autocomplete="off"></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="adicionarCompra()">Adicionar</button></div>`;
+}
+function formTarefa(){
+  return `<h2>Nova tarefa</h2>
+    <div class="form-group"><label>Tarefa</label><input id="inputTarefa" placeholder="Ex.: Lavar a roupa" autocomplete="off"></div>
+    <div class="form-group"><label>Quando</label><select id="inputDia"><option>Hoje</option><option>Amanhã</option><option>Esta semana</option></select></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="adicionarTarefa()">Adicionar</button></div>`;
+}
+function formEvento(path, titulo){
+  return `<h2>${titulo}</h2>
+    <div class="form-group"><label>Título</label><input id="evTitulo" placeholder="Ex.: Reunião de pais" autocomplete="off"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Data</label><input id="evData" type="date" value="${hojeISO()}"></div>
+      <div class="form-group"><label>Hora</label><input id="evHora" type="time"></div>
+    </div>
+    <div class="form-group"><label>Local (opcional)</label><input id="evLocal" placeholder="Ex.: Escola" autocomplete="off"></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="adicionarEvento('${path}')">Guardar</button></div>`;
+}
+function formAtividade(){
+  return `<h2>Nova atividade</h2>
+    <div class="form-group"><label>Atividade</label><input id="atNome" placeholder="Ex.: Natação" autocomplete="off"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Dia</label><select id="atDia">${DIAS_SEMANA.map(d=>`<option>${d}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Hora</label><input id="atHora" type="time"></div>
+    </div>
+    <div class="form-group"><label>Local (opcional)</label><input id="atLocal" placeholder="Ex.: Piscina Municipal" autocomplete="off"></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="adicionarAtividade()">Guardar</button></div>`;
+}
+function formLevantar(){
+  return `<h2>Gastar da mesada</h2>
+    <div class="form-group"><label>Valor (€)</label><input id="levValor" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="gastarMesada()">Confirmar</button></div>`;
+}
+function formPlanta(){
+  return `<h2>Nova planta</h2>
+    <div class="form-group"><label>Nome</label><input id="plNome" placeholder="Ex.: Costela-de-adão" autocomplete="off"></div>
+    <div class="form-group"><label>Onde está (opcional)</label><input id="plLocal" placeholder="Ex.: Sala" autocomplete="off"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Regar a cada (dias)</label><input id="plFreq" type="number" inputmode="numeric" min="1" value="7"></div>
+      <div class="form-group"><label>Última rega</label><input id="plUltima" type="date" value="${hojeISO()}"></div>
+    </div>
+    <div class="btn-row"><button class="btn ghost" onclick="fecharSheet()">Cancelar</button><button class="btn primary" onclick="adicionarPlanta()">Adicionar</button></div>`;
+}
+Object.assign(window,{formCompra,formTarefa,formEvento,formAtividade,formLevantar,formPlanta});
+
+/* ACÇÕES */
+window.adicionarCompra = function(){
+  const item = $('#inputItem').value.trim();
+  if (!item) return toast('Escreve algo primeiro');
+  estado.casa.compras.push({ id: proximoId(estado.casa.compras), item, feito: false });
+  guardar(); fecharSheet(); renderTudo(); toast('Adicionado à lista');
+};
+window.adicionarTarefa = function(){
+  const tarefa = $('#inputTarefa').value.trim();
+  if (!tarefa) return toast('Escreve algo primeiro');
+  estado.casa.tarefas.push({ id: proximoId(estado.casa.tarefas), tarefa, feito: false, dia: $('#inputDia').value });
+  guardar(); fecharSheet(); renderTudo(); toast('Tarefa adicionada');
+};
+window.adicionarEvento = function(path){
+  const titulo = $('#evTitulo').value.trim(), data = $('#evData').value;
+  if (!titulo || !data) return toast('Preenche título e data');
+  const arr = getArr(path);
+  arr.push({ id: proximoId(arr), titulo, data, hora: $('#evHora').value, local: $('#evLocal').value.trim() });
+  guardar(); fecharSheet(); renderTudo(); toast('Guardado');
+};
+window.adicionarAtividade = function(){
+  const nome = $('#atNome').value.trim();
+  if (!nome) return toast('Escreve o nome da atividade');
+  estado.filha.atividades.push({ id: proximoId(estado.filha.atividades), nome, dia: $('#atDia').value, hora: $('#atHora').value, local: $('#atLocal').value.trim() });
+  guardar(); fecharSheet(); renderTudo(); toast('Atividade guardada');
+};
+window.adicionarPlanta = function(){
+  const nome = $('#plNome').value.trim();
+  if (!nome) return toast('Dá um nome à planta');
+  estado.casa.plantas.push({ id: proximoId(estado.casa.plantas), nome, local: $('#plLocal').value.trim(), freq: Math.max(1, parseInt($('#plFreq').value,10) || 7), ultima: $('#plUltima').value || hojeISO() });
+  guardar(); fecharSheet(); renderTudo(); toast('Planta adicionada');
+};
+window.regar = function(id){
+  const p = estado.casa.plantas.find(x => x.id === id);
+  if (!p) return;
+  p.ultima = hojeISO(); guardar(); renderTudo(); toast(`${p.nome} regada`);
+};
+window.darMesada = function(){
+  const m = estado.filha.mesada;
+  if (!m.semana) return toast('Define a mesada nos ajustes');
+  m.total = (m.total||0) + m.semana; guardar(); renderFilha(); toast(`+ ${fmt(m.semana)} guardados`);
+};
+window.gastarMesada = function(){
+  const v = num($('#levValor').value), m = estado.filha.mesada;
+  if (!v || v <= 0) return toast('Indica um valor');
+  if (v > m.total) return toast('Não há tanto guardado');
+  m.total -= v; guardar(); fecharSheet(); renderFilha(); toast(`− ${fmt(v)}`);
+};
+
+/* TOAST */
+let toastTimer;
+function toast(msg){
+  const el = $('#toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* AJUSTES */
+$('#btnConfig').addEventListener('click', () => {
+  abrirSheet(`
+    <h2>Ajustes</h2>
+    <div class="form-row">
+      <div class="form-group"><label>O teu nome</label><input id="cfgNome" value="${escapeHtml(estado.nome)}" maxlength="20" placeholder="Opcional"></div>
+      <div class="form-group"><label>Nome da filha</label><input id="cfgFilhaNome" value="${escapeHtml(estado.filhaNome)}" maxlength="20" placeholder="Opcional"></div>
+    </div>
+    <div class="form-group"><label>Idade / ano da filha</label><input id="cfgFilhaIdade" value="${escapeHtml(estado.filhaIdade)}" maxlength="30" placeholder="Ex.: 7 anos · 2.º ano"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Mesada semanal (€)</label><input id="cfgMesada" type="number" step="0.01" value="${(estado.filha.mesada.semana||0).toFixed(2)}"></div>
+      <div class="form-group"><label>Mesada guardada (€)</label><input id="cfgMesadaTotal" type="number" step="0.01" value="${(estado.filha.mesada.total||0).toFixed(2)}"></div>
+    </div>
+    <div class="form-group"><label>Cópia de segurança</label>
+      <div class="btn-row" style="margin-top:0">
+        <button class="btn soft" onclick="exportarDados()">Exportar</button>
+        <button class="btn soft" onclick="$('#fileImport').click()">Importar</button>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn danger" onclick="apagarTudo()">Apagar tudo</button>
+      <button class="btn primary" onclick="guardarConfig()">Guardar</button>
+    </div>
+  `);
+});
+window.guardarConfig = function(){
+  estado.nome = $('#cfgNome').value.trim();
+  estado.filhaNome = $('#cfgFilhaNome').value.trim();
+  estado.filhaIdade = $('#cfgFilhaIdade').value.trim();
+  estado.filha.mesada.semana = num($('#cfgMesada').value) || 0;
+  estado.filha.mesada.total = num($('#cfgMesadaTotal').value) || 0;
+  guardar(); fecharSheet(); atualizarHeader(); renderTudo(); toast('Guardado');
+};
+window.apagarTudo = function(){
+  if (!confirm('Apagar todos os dados? Isto não se pode desfazer.')) return;
+  estado = estadoVazio(); guardar(); fecharSheet(); atualizarHeader(); renderTudo(); toast('Tudo apagado');
+};
+window.exportarDados = function(){
+  try {
+    const blob = new Blob([JSON.stringify(estado,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `casa-vida-${hojeISO()}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('Cópia exportada');
+  } catch (e) { toast('Não foi possível exportar'); }
+};
+$('#fileImport').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const s = JSON.parse(r.result);
+      if (!s || typeof s !== 'object' || !s.filha || !s.casa) throw 0;
+      estado = normalizar(s); guardar(); fecharSheet(); atualizarHeader(); renderTudo(); toast('Dados importados');
+    } catch (err) { toast('Ficheiro inválido'); }
+  };
+  r.readAsText(f); e.target.value = '';
+});
+
+/* ARRANQUE */
+function renderTudo(){ renderInicio(); renderAgenda(); renderFilha(); renderCasa(); }
+atualizarHeader();
+renderTudo();
+</script>
+</body>
+</html>
