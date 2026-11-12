@@ -1,0 +1,22 @@
+{
+  "name": "Lista Must Do",
+  "short_name": "Must Do",
+  "start_url": "/lista-must-do/",
+  "scope": "/lista-must-do/",
+  "display": "standalone",
+  "background_color": "#f7f7f7",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "icone.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icone.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
